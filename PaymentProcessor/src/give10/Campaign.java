@@ -1,7 +1,7 @@
 /**
  * 
  */
-package give10new;
+package give10;
 
 /**
  * @author Martin Locklear (locklear.martin@gmail.com)

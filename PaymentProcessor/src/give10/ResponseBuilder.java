@@ -1,7 +1,7 @@
 /**
  * 
  */
-package give10new;
+package give10;
 
 import twitter4j.Status;
 
