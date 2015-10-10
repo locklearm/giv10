@@ -48,24 +48,41 @@ public class DatabaseConnector {
 	    JsonElement root = jp.parse(new InputStreamReader((InputStream) request.getContent())); //Convert the input stream to a json element
 //	    JsonObject rootobj = root.getAsJsonObject(); //May be an array, may be an object. 
 //	    JsonArray users = rootobj.get("memberName").getAsJsonArray();
-	    JsonArray users = root.getAsJsonArray();
+	    JsonArray usersJSON = root.getAsJsonArray();
 	    
 	    //Create the list to store the users
-	    ArrayList<String> userNames = new ArrayList<>();
+	    ArrayList<User> users = new ArrayList<>();
 	    
-	    Iterator<JsonElement> userIter = users.iterator();
+	    Iterator<JsonElement> userIter = usersJSON.iterator();
 	    while (userIter.hasNext()) {
 	    	JsonElement curUserEl = userIter.next();
 	    	JsonObject curUserOb = curUserEl.getAsJsonObject();
 	    	User u = new User();
 	    	
 	    	//Fill in the user data
-	    	u.name = curUserOb.get("name").getAsString();
-	    	u.email = curUserOb.get("email").getAsString();
-	    	u.twitterhandle = curUserOb.get("twitterhandle").getAsString();
+	    	
+	    	JsonElement name = curUserOb.get("name");
+	    	JsonElement email = curUserOb.get("email");
+	    	JsonElement twitterhandle = curUserOb.get("twitterhandle");
+	    	JsonElement customerid = curUserOb.get("customerid");
+	    	
+	    	if (name != null) {
+	    		u.name = name.getAsString();
+	    	}
+	    	if (email != null) {
+	    		u.email = email.getAsString();
+	    	}
+	    	if (twitterhandle != null) {
+	    		u.twitterhandle = twitterhandle.getAsString();
+	    	}
+	    	if (customerid != null) {
+	    		u.customerid = customerid.getAsString();
+	    	}
+	    	
+	    	users.add(u);
 	    }
 	    
-	    return null;
+	    return users;
 	}
 
 }

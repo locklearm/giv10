@@ -12,6 +12,7 @@ public class User {
 	public String name;
 	public String email;
 	public String twitterhandle;
+	public String customerid;
 	public String createdAt;
 	public String updatedAt;
 	public long id;
