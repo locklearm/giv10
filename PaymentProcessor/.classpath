@@ -14,9 +14,21 @@
 	<classpathentry kind="lib" path="libs/json-smart-1.1.1.jar"/>
 	<classpathentry kind="lib" path="libs/nimbus-jose-jwt-2.11.0.jar"/>
 	<classpathentry kind="lib" path="libs/payments-sdk-java-1.3.0.jar"/>
-	<classpathentry kind="lib" path="libs/twitter4j-core-4.0.4.jar">
+	<classpathentry kind="lib" path="libs/twitter4j-core-4.0.4.jar" sourcepath="C:/Users/Martin/Downloads/twitter4j-4.0.4/twitter4j-core/src">
 		<attributes>
 			<attribute name="javadoc_location" value="http://twitter4j.org/javadoc/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="libs/twitter4j-async-4.0.4.jar" sourcepath="C:/Users/Martin/Downloads/twitter4j-4.0.4/twitter4j-async/src">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/C:/Users/Martin/Downloads/twitter4j-4.0.4/twitter4j-async/javadoc"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="libs/twitter4j-examples-4.0.4.jar"/>
+	<classpathentry kind="lib" path="libs/twitter4j-media-support-4.0.4.jar"/>
+	<classpathentry kind="lib" path="libs/twitter4j-stream-4.0.4.jar" sourcepath="C:/Users/Martin/Downloads/twitter4j-4.0.4/twitter4j-stream/src">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/C:/Users/Martin/Downloads/twitter4j-4.0.4/twitter4j-stream/javadoc/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
