@@ -18,24 +18,24 @@ public class ResponseBuilder {
 	
 	public static String buildUnregisteredResponse(Status s) {
 		
-		return ResponseBuilder.ResponseNotRegisteredUser;
+		return s.getInReplyToStatusId() + ResponseBuilder.ResponseNotRegisteredUser;
 		
 	}
 	
 	public static String buildRegisteredUserNoCampaignResponse(Status s) {
 		
-		return ResponseBuilder.ResponseRegisteredUserNoCampaign;
+		return s.getInReplyToStatusId() + ResponseBuilder.ResponseRegisteredUserNoCampaign;
 		
 	}
 	
 	public static String buildRegisteredUserResponse(Status s) {
 		
-		return ResponseBuilder.ResponseRegisteredUser;
+		return s.getInReplyToStatusId() + ResponseBuilder.ResponseRegisteredUser;
 		
 	}
 
 	public static String buildPaymentFailedResponse(Status s) {
-		return ResponseBuilder.ResponsePaymentFailed;
+		return s.getInReplyToStatusId() + ResponseBuilder.ResponsePaymentFailed;
 	}
 	
 }

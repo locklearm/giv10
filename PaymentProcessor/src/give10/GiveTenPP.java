@@ -14,6 +14,11 @@ public class GiveTenPP {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		
+		TwitterManager tw = TwitterManager.getInstance();
+		
+		
+		
 
 	}
 

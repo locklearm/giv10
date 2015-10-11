@@ -13,6 +13,7 @@ import twitter4j.Status;
 import twitter4j.StatusDeletionNotice;
 import twitter4j.StatusListener;
 import twitter4j.Twitter;
+import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.TwitterStream;
 import twitter4j.TwitterStreamFactory;
@@ -24,10 +25,15 @@ import twitter4j.conf.ConfigurationBuilder;
  */
 public class TwitterManager implements StatusListener {
 	
-	public static String OAuthConsumerKey = "Se762MdYJHbi38qgiGG5VPu2g";
-	public static String OAuthConsumerSecret = "KJgl4mPlqbkRZpDgHOduNQ4h7kRJxOb0V0eErCPol9KFXIKHAH";
-	public static String OAuthAccessToken = "3820287795-0lLpR9jHcBVRKwjOWnN1gcHy3Rbrasx1af0sYd4";
-	public static String OAuthAccessTokenSecret = "YvCYqAOKAeUmnWHSqZcsLVPUyW6hNG6FXEOYsll8QywZ5";
+	public static String OAuthConsumerKeyMartin = "Se762MdYJHbi38qgiGG5VPu2g";
+	public static String OAuthConsumerSecretMartin = "KJgl4mPlqbkRZpDgHOduNQ4h7kRJxOb0V0eErCPol9KFXIKHAH";
+	public static String OAuthAccessTokenMartin = "3820287795-0lLpR9jHcBVRKwjOWnN1gcHy3Rbrasx1af0sYd4";
+	public static String OAuthAccessTokenSecretMartin = "YvCYqAOKAeUmnWHSqZcsLVPUyW6hNG6FXEOYsll8QywZ5";
+	
+	public static String OAuthConsumerKeyGiv10 = "14V6qcHCJM1cxfjM6Q1w0cw3H";
+	public static String OAuthConsumerSecretGiv10 = "uZqZmTbCPWunGPnMr9n7jA0C8bmTmfVmpHL0iw5zcGOp058Vuo";
+	public static String OAuthAccessTokenGiv10 = "3850811724-rt2atWjtNoD76qXY0frggLIzPlIf5SgoQejIOwP";
+	public static String OAuthAccessTokenSecretGiv10 = "mxiw1ODjHVxx1Je4m8xmhuWbixUv1CCOJKj01oYBvmMdN";
 	
 	private static TwitterManager instance;
 	
@@ -51,15 +57,15 @@ public class TwitterManager implements StatusListener {
 		this.giv10Tags.add("GivTen");
 		
 		//Set up credentials
-		ConfigurationBuilder cb = new ConfigurationBuilder();
-		cb.setDebugEnabled(true)
-		  .setOAuthConsumerKey(OAuthConsumerKey)
-		  .setOAuthConsumerSecret(OAuthConsumerSecret)
-		  .setOAuthAccessToken(OAuthAccessToken)
-		  .setOAuthAccessTokenSecret(OAuthAccessTokenSecret);
+		ConfigurationBuilder cbMartin = new ConfigurationBuilder();
+		cbMartin.setDebugEnabled(true)
+		  .setOAuthConsumerKey(OAuthConsumerKeyMartin)
+		  .setOAuthConsumerSecret(OAuthConsumerSecretMartin)
+		  .setOAuthAccessToken(OAuthAccessTokenMartin)
+		  .setOAuthAccessTokenSecret(OAuthAccessTokenSecretMartin);
 		
 		//Setup and start the stream
-		this.twStream = new TwitterStreamFactory(cb.build()).getInstance();
+		this.twStream = new TwitterStreamFactory(cbMartin.build()).getInstance();
 		this.twStream.addListener(this);
 		
 		//Setup the filter
@@ -69,7 +75,13 @@ public class TwitterManager implements StatusListener {
 		this.twStream.filter(fq);
 		
 		//Now we set up the twitter object, so that we can post
-		this.tw = new TwitterFactory(cb.build()).getInstance();
+		ConfigurationBuilder cbGiv10 = new ConfigurationBuilder();
+		cbGiv10.setDebugEnabled(true)
+		  .setOAuthConsumerKey(OAuthConsumerKeyGiv10)
+		  .setOAuthConsumerSecret(OAuthConsumerSecretGiv10)
+		  .setOAuthAccessToken(OAuthAccessTokenGiv10)
+		  .setOAuthAccessTokenSecret(OAuthAccessTokenSecretGiv10);
+		this.tw = new TwitterFactory(cbGiv10.build()).getInstance();
 		
 	}
 	public static TwitterManager getInstance() {
@@ -86,14 +98,19 @@ public class TwitterManager implements StatusListener {
 	@Override
 	public void onStatus(Status status) {
 		
+		System.out.println("Processing: " + status.getUser().getScreenName());
+		System.out.println("\t" + status.getText());
+		
 		//First, we verify whether this is a tweet we are interested in
 		if (!this.isGiv10Tweet(status)) {
+			System.out.println("\tEXTRA TWEET");
 			return;
 		}
 		
 		//Is this a valid user
 		User u = this.getUser(status);
 		if (u == null) {
+			System.out.println("\tUNREGISTERED USER");
 			//If this isn't a registered user, send them a message.
 			this.sendResponse(ResponseBuilder.buildUnregisteredResponse(status));
 			return;
@@ -102,6 +119,7 @@ public class TwitterManager implements StatusListener {
 		//Get the campaign
 		Campaign camp = this.getCampaign(status);
 		if (camp == null) {
+			System.out.println("\tNO CAMPAIGN");
 			//If there wasn't a campaign, send that response
 			this.sendResponse(ResponseBuilder.buildRegisteredUserNoCampaignResponse(status));
 			return;
@@ -111,10 +129,12 @@ public class TwitterManager implements StatusListener {
 		boolean isPaymentSuccess = PaymentProcessor.processPayment(u);
 		
 		if (isPaymentSuccess) {
+			System.out.println("\tPAYMENT SUCCESS");
 			//Send the success response
 			this.sendResponse(ResponseBuilder.buildRegisteredUserResponse(status));
 		}
 		else {
+			System.out.println("\tPAYMENT FAILED");
 			this.sendResponse(ResponseBuilder.buildPaymentFailedResponse(status));
 		}
 		
@@ -149,7 +169,21 @@ public class TwitterManager implements StatusListener {
 	}
 	
 	private void sendResponse(String s) {
-		//TODO
+		
+		System.out.println("Sending Response: " + s);
+		
+		try {
+			Status status = this.tw.updateStatus(s);
+			System.out.println("'tTweet id: " + status.getId());
+		} catch (TwitterException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("ERROR: Couldn't update status: " + s);
+		}
+		
+		
+		
+		
 	}
 	
 	@Override
