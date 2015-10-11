@@ -152,6 +152,13 @@ public class TwitterManager implements StatusListener {
 			System.out.println("\tPAYMENT SUCCESS");
 			//Send the success response
 			this.sendResponse(ResponseBuilder.buildRegisteredUserResponse(status, camp), status);
+			
+			try {
+				this.tw.retweetStatus(status.getId());
+			} catch (TwitterException e) {
+				System.out.println("ERROR: Couldn't retweet:" + status.getText());
+			}
+			
 			return;
 		}
 		else {
