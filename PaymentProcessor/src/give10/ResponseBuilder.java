@@ -44,7 +44,7 @@ public class ResponseBuilder {
 	public static String buildPaymentFailedResponse(Status s) {
 		
 		String response = "";
-		response += "Sorry @" + s.getUser().getScreenName() + ".";
+		response += "Sorry @" + s.getUser().getScreenName() + " .";
 		response += " We were unable to process your donation.";
 		
 		return response;

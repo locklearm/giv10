@@ -54,8 +54,8 @@ public class DatabaseConnector {
     	//Get the user data
     	JsonElement name = userJsonObject.get("name");
     	JsonElement email = userJsonObject.get("email");
-    	JsonElement twitterhandle = userJsonObject.get("twitterhandle");
-    	JsonElement customerid = userJsonObject.get("customerid");
+    	JsonElement twitterhandle = userJsonObject.get("twitterHandle");
+    	JsonElement customerid = userJsonObject.get("customerID");
     	
     	//Fill in the user object
     	User u = new User();

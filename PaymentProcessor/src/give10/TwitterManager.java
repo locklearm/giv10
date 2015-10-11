@@ -43,6 +43,8 @@ public class TwitterManager implements StatusListener {
 	private Twitter tw;
 	private ArrayList<String> giv10Tags = new ArrayList<String>();
 	
+	private PaymentProcessor pp = new PaymentProcessor();
+	
 	private TwitterManager() {
 		
 		//Store the filter tags
@@ -128,7 +130,7 @@ public class TwitterManager implements StatusListener {
 		}
 		
 		//Process the payment
-		boolean isPaymentSuccess = PaymentProcessor.processPayment(u);
+		boolean isPaymentSuccess = this.pp.processPayment(u);
 		
 		if (isPaymentSuccess) {
 			System.out.println("\tPAYMENT SUCCESS");
