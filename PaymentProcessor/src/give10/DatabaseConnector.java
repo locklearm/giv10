@@ -68,8 +68,14 @@ public class DatabaseConnector {
     	if (twitterhandle != null) {
     		u.twitterhandle = twitterhandle.getAsString();
     	}
+    	else {
+    		return null;  //If there's no twitter handle, then we need to return null (there is a null check later).
+    	}
     	if (customerid != null) {
     		u.customerid = customerid.getAsString();
+    	}
+    	else {
+    		return null;  //If there's no customer ID, then we need to return null (there is a null check later).
     	}
 		
     	return u;

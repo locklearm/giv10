@@ -134,10 +134,12 @@ public class TwitterManager implements StatusListener {
 			System.out.println("\tPAYMENT SUCCESS");
 			//Send the success response
 			this.sendResponse(ResponseBuilder.buildRegisteredUserResponse(status), status);
+			return;
 		}
 		else {
 			System.out.println("\tPAYMENT FAILED");
 			this.sendResponse(ResponseBuilder.buildPaymentFailedResponse(status), status);
+			return;
 		}
 		
 	}

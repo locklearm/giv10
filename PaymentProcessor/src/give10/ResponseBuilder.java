@@ -11,14 +11,10 @@ import twitter4j.Status;
  */
 public class ResponseBuilder {
 	
-	private static String ResponseRegisteredUserNoCampaign = "Sorry, you've tried to donate to a campaign that we don't support.";
-	private static String ResponseRegisteredUser = "Thanks for supporting! ";
-	private static String ResponsePaymentFailed = "Sorry, unable to process your donation.";
-	
 	public static String buildUnregisteredResponse(Status s) {
 		
 		String response = "";
-		response += "Sorry @" + s.getUser().getScreenName() + " ";
+		response += "Sorry @" + s.getUser().getScreenName();
 		response += ", you have to register at givten.com to donate!";
 		
 		return response;
@@ -26,19 +22,32 @@ public class ResponseBuilder {
 	}
 	
 	public static String buildRegisteredUserNoCampaignResponse(Status s) {
+
+		String response = "";
+		response += "Sorry @" + s.getUser().getScreenName();
+		response += ", you seem to have tried to donate to a campaign that we don't support... yet.";
 		
-		return ResponseBuilder.ResponseRegisteredUserNoCampaign;
+		return response;
 		
 	}
 	
 	public static String buildRegisteredUserResponse(Status s) {
 		
-		return ResponseBuilder.ResponseRegisteredUser;
+		String response = "";
+		response += "Thanks @" + s.getUser().getScreenName() + ".";
+		response += " Your payment has been processed.";
+		
+		return response;
 		
 	}
 
 	public static String buildPaymentFailedResponse(Status s) {
-		return ResponseBuilder.ResponsePaymentFailed;
+		
+		String response = "";
+		response += "Sorry @" + s.getUser().getScreenName() + ".";
+		response += " We were unable to process your donation.";
+		
+		return response;
 	}
 	
 }
