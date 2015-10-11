@@ -188,6 +188,7 @@ public class TwitterManager implements StatusListener {
 			
 			StatusUpdate update = new StatusUpdate(response);
 			update.setInReplyToStatusId(status.getId());
+			update.inReplyToStatusId(status.getId());
 			Status newStatus = this.tw.updateStatus(update);
 			
 			System.out.println("Sent Response: " + newStatus.getText());
