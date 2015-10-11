@@ -12,6 +12,7 @@ import twitter4j.StallWarning;
 import twitter4j.Status;
 import twitter4j.StatusDeletionNotice;
 import twitter4j.StatusListener;
+import twitter4j.StatusUpdate;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
@@ -30,6 +31,7 @@ public class TwitterManager implements StatusListener {
 	public static String OAuthAccessTokenMartin = "3820287795-0lLpR9jHcBVRKwjOWnN1gcHy3Rbrasx1af0sYd4";
 	public static String OAuthAccessTokenSecretMartin = "YvCYqAOKAeUmnWHSqZcsLVPUyW6hNG6FXEOYsll8QywZ5";
 	
+	public static String GiveTenHandle = "givTen";
 	public static String OAuthConsumerKeyGiv10 = "14V6qcHCJM1cxfjM6Q1w0cw3H";
 	public static String OAuthConsumerSecretGiv10 = "uZqZmTbCPWunGPnMr9n7jA0C8bmTmfVmpHL0iw5zcGOp058Vuo";
 	public static String OAuthAccessTokenGiv10 = "3850811724-rt2atWjtNoD76qXY0frggLIzPlIf5SgoQejIOwP";
@@ -112,7 +114,7 @@ public class TwitterManager implements StatusListener {
 		if (u == null) {
 			System.out.println("\tUNREGISTERED USER");
 			//If this isn't a registered user, send them a message.
-			this.sendResponse(ResponseBuilder.buildUnregisteredResponse(status));
+			this.sendResponse(ResponseBuilder.buildUnregisteredResponse(status), status);
 			return;
 		}
 		
@@ -121,7 +123,7 @@ public class TwitterManager implements StatusListener {
 		if (camp == null) {
 			System.out.println("\tNO CAMPAIGN");
 			//If there wasn't a campaign, send that response
-			this.sendResponse(ResponseBuilder.buildRegisteredUserNoCampaignResponse(status));
+			this.sendResponse(ResponseBuilder.buildRegisteredUserNoCampaignResponse(status), status);
 			return;
 		}
 		
@@ -131,17 +133,23 @@ public class TwitterManager implements StatusListener {
 		if (isPaymentSuccess) {
 			System.out.println("\tPAYMENT SUCCESS");
 			//Send the success response
-			this.sendResponse(ResponseBuilder.buildRegisteredUserResponse(status));
+			this.sendResponse(ResponseBuilder.buildRegisteredUserResponse(status), status);
 		}
 		else {
 			System.out.println("\tPAYMENT FAILED");
-			this.sendResponse(ResponseBuilder.buildPaymentFailedResponse(status));
+			this.sendResponse(ResponseBuilder.buildPaymentFailedResponse(status), status);
 		}
 		
 	}
 	
 	private boolean isGiv10Tweet(Status status) {
 		
+		//Check whether this is our own user
+		if (TwitterManager.GiveTenHandle.equals(status.getUser().getScreenName())) {
+			return false;
+		}
+		
+		//Check for the hashtag
 		for (HashtagEntity ht : status.getHashtagEntities()) {
 			if (this.giv10Tags.contains(ht.getText())) {
 				return true;
@@ -168,17 +176,22 @@ public class TwitterManager implements StatusListener {
 		return c;
 	}
 	
-	private void sendResponse(String s) {
+	private void sendResponse(String response, Status status) {
 		
-		System.out.println("Sending Response: " + s);
+		
 		
 		try {
-			Status status = this.tw.updateStatus(s);
-			System.out.println("'tTweet id: " + status.getId());
+			
+			StatusUpdate update = new StatusUpdate(response);
+			update.setInReplyToStatusId(status.getId());
+			Status newStatus = this.tw.updateStatus(update);
+			
+			System.out.println("Sent Response: " + newStatus.getText());
+			
 		} catch (TwitterException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			System.out.println("ERROR: Couldn't update status: " + s);
+			System.out.println("ERROR: Couldn't update status: " + response);
 		}
 		
 		
