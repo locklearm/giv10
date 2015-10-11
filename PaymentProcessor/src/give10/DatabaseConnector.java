@@ -67,6 +67,8 @@ public class DatabaseConnector {
     	}
     	if (twitterhandle != null) {
     		u.twitterhandle = twitterhandle.getAsString();
+    		//Remove the @ symbol
+    		u.twitterhandle = u.twitterhandle.replace("@", "");
     	}
     	else {
     		return null;  //If there's no twitter handle, then we need to return null (there is a null check later).

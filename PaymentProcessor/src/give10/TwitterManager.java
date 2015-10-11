@@ -41,7 +41,9 @@ public class TwitterManager implements StatusListener {
 	
 	private TwitterStream twStream; 
 	private Twitter tw;
+	
 	private ArrayList<String> giv10Tags = new ArrayList<String>();
+	private ArrayList<String> campaingTags = new ArrayList<String>();
 	
 	private PaymentProcessor pp = new PaymentProcessor();
 	
@@ -59,6 +61,11 @@ public class TwitterManager implements StatusListener {
 		this.giv10Tags.add("Giveten");
 		this.giv10Tags.add("GiveTen");
 		this.giv10Tags.add("GivTen");
+		
+		//Create campaign tags
+		this.campaingTags.add("DOTA2Compendium");
+		this.campaingTags.add("Shannon2Rio");
+		
 		
 		//Set up credentials
 		ConfigurationBuilder cbMartin = new ConfigurationBuilder();
@@ -111,17 +118,26 @@ public class TwitterManager implements StatusListener {
 			return;
 		}
 		
+		//Get the campaign
+		Campaign camp = this.getCampaign(status);
+		
 		//Is this a valid user
 		User u = this.getUser(status);
 		if (u == null) {
 			System.out.println("\tUNREGISTERED USER");
+			
+			//If not a registered user, AND no campaign, do nothing
+			if (camp == null) {
+				System.out.println("\t\tUSING OUR HASHTAG!!!");
+				return;
+			}
+			
 			//If this isn't a registered user, send them a message.
-			this.sendResponse(ResponseBuilder.buildUnregisteredResponse(status), status);
+			this.sendResponse(ResponseBuilder.buildUnregisteredResponse(status, camp), status);
 			return;
 		}
 		
-		//Get the campaign
-		Campaign camp = this.getCampaign(status);
+		//Check the campaign
 		if (camp == null) {
 			System.out.println("\tNO CAMPAIGN");
 			//If there wasn't a campaign, send that response
@@ -135,12 +151,12 @@ public class TwitterManager implements StatusListener {
 		if (isPaymentSuccess) {
 			System.out.println("\tPAYMENT SUCCESS");
 			//Send the success response
-			this.sendResponse(ResponseBuilder.buildRegisteredUserResponse(status), status);
+			this.sendResponse(ResponseBuilder.buildRegisteredUserResponse(status, camp), status);
 			return;
 		}
 		else {
 			System.out.println("\tPAYMENT FAILED");
-			this.sendResponse(ResponseBuilder.buildPaymentFailedResponse(status), status);
+			this.sendResponse(ResponseBuilder.buildPaymentFailedResponse(status, camp), status);
 			return;
 		}
 		
@@ -175,8 +191,16 @@ public class TwitterManager implements StatusListener {
 		return null;
 	}
 	private Campaign getCampaign(Status status) {
+		
 		Campaign c = new Campaign();
-		c.name = "TestCamp";
+		
+		for (HashtagEntity ht : status.getHashtagEntities()) {
+			if (this.campaingTags.contains(ht.getText())) {
+				c.name = ht.getText();
+				break;
+			}
+		}
+		
 		return c;
 	}
 	

@@ -11,11 +11,11 @@ import twitter4j.Status;
  */
 public class ResponseBuilder {
 	
-	public static String buildUnregisteredResponse(Status s) {
+	public static String buildUnregisteredResponse(Status s, Campaign c) {
 		
 		String response = "";
 		response += "Sorry @" + s.getUser().getScreenName();
-		response += ", you have to register at givten.com to donate!";
+		response += ", you have to register at givten.com to donate to " + c.name + "!";
 		
 		return response;
 		
@@ -31,21 +31,22 @@ public class ResponseBuilder {
 		
 	}
 	
-	public static String buildRegisteredUserResponse(Status s) {
+	public static String buildRegisteredUserResponse(Status s, Campaign c) {
 		
 		String response = "";
 		response += "Thanks @" + s.getUser().getScreenName() + ".";
-		response += " Your payment has been processed.";
+		response += " Your donation to " + c.name + " has been processed.";
 		
 		return response;
 		
 	}
 
-	public static String buildPaymentFailedResponse(Status s) {
+	public static String buildPaymentFailedResponse(Status s, Campaign c) {
 		
 		String response = "";
 		response += "Sorry @" + s.getUser().getScreenName() + " .";
-		response += " We were unable to process your donation.";
+		response += " We were unable to process your donation to ";
+		response += c.name + ".";
 		
 		return response;
 	}

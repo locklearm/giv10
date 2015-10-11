@@ -20,21 +20,21 @@ public class PaymentProcessor {
 	
 	public PaymentProcessor() {
 
-		PaymentsApi.PUBLIC_KEY = "sbpb_ZjlmNmY0NTYtYjkxNi00MGU4LWFmOWMtYTAxYjU5Y2U5YjBk";
-		PaymentsApi.PRIVATE_KEY = "zp96oMcWFdFlfD3pVn5q64zJG6iZVQFPbb9Z9pQ9jst5YFFQL0ODSXAOkNtXTToq";
+		//PaymentsApi.PUBLIC_KEY = "sbpb_ZjlmNmY0NTYtYjkxNi00MGU4LWFmOWMtYTAxYjU5Y2U5YjBk";
+		//PaymentsApi.PRIVATE_KEY = "zp96oMcWFdFlfD3pVn5q64zJG6iZVQFPbb9Z9pQ9jst5YFFQL0ODSXAOkNtXTToq";
 		
 	}
 	
 	public boolean processPayment(User u) {
 
-//		PaymentsApi.PUBLIC_KEY = "sbpb_ZjlmNmY0NTYtYjkxNi00MGU4LWFmOWMtYTAxYjU5Y2U5YjBk";
-//		PaymentsApi.PRIVATE_KEY = "zp96oMcWFdFlfD3pVn5q64zJG6iZVQFPbb9Z9pQ9jst5YFFQL0ODSXAOkNtXTToq";
+		PaymentsApi.PUBLIC_KEY = "sbpb_ZjlmNmY0NTYtYjkxNi00MGU4LWFmOWMtYTAxYjU5Y2U5YjBk";
+		PaymentsApi.PRIVATE_KEY = "zp96oMcWFdFlfD3pVn5q64zJG6iZVQFPbb9Z9pQ9jst5YFFQL0ODSXAOkNtXTToq";
 		
 		Payment payment = null;
 		try {
 			payment = Payment.create(new PaymentsMap()
 				    .set("currency", "USD")
-				    .set("token", u.customerid)
+				    .set("customer", u.customerid)
 				    .set("amount", 1000) // In cents e.g. $10.00
 				    .set("description", "giv10 Payment"));
 			
